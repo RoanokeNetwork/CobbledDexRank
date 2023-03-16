@@ -1,25 +1,22 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "dexrankcobbled",
   "version": "${version}",
-  "name": "ExampleMod",
-  "description": "Template for Cobblemon addon development",
+  "name": "DexRankCobbled",
+  "description": "Playing with Kotlin & Cobblemon",
   "authors": [
-    "Reyn"
+    "complacentdev"
   ],
   "contact": {
-    "repo": "https://github.com/DotReyn/Cobblemon-Template"
+    "repo": "https://github.com/RoanokeNetwork/CobbledDexRank"
   },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.examplemod.ExampleMod"
+      "network.roanoke.dexrank.DexRank"
     ]
   },
-  "mixins": [
-    "examplemod.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=0.14.10",
     "fabric": "*",
