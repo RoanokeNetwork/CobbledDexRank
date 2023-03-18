@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import eu.pb4.placeholders.api.PlaceholderResult
 import eu.pb4.placeholders.api.Placeholders
@@ -32,11 +33,21 @@ class DexRank : ModInitializer {
             }
         }
 
-        // Create Pokédex data if it doesn't exist
+        // Create Pokédex data & fill in PC if it doesn't exist
         CobblemonEvents.PLAYER_JOIN.subscribe {
             val playerData = Cobblemon.playerData.get(it)
             if (playerData.extraData[PokedexDataExtension.NAME_KEY] == null) {
                 playerData.extraData[PokedexDataExtension.NAME_KEY] = PokedexDataExtension(hashSetOf())
+                val iter: Iterator<Pokemon> = Cobblemon.storage.getPC(it.uuid).iterator()
+                while (iter.hasNext()) {
+                    val mon = iter.next()
+                    this.handleGenericEvent(it, mon.species)
+                }
+                val iterParty: Iterator<Pokemon> = Cobblemon.storage.getParty(it.uuid).iterator()
+                while (iterParty.hasNext()) {
+                    val mon = iterParty.next()
+                    this.handleGenericEvent(it, mon.species)
+                }
             }
         }
 
