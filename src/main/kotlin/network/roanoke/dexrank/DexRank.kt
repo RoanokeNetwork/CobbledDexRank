@@ -78,10 +78,6 @@ class DexRank : ModInitializer {
         Placeholders.register(Identifier("pokedex", "implemented_total")) { _, _ ->
             return@register PlaceholderResult.value(PokemonSpecies.implemented.size.toString())
         }
-
-        ServerLifecycleEvents.SERVER_STOPPED.register {
-            rankManager.saveDexData()
-        }
     }
 
 }
