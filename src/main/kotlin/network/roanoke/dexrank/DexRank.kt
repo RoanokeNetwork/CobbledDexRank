@@ -10,6 +10,7 @@ import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.util.Identifier
+import network.roanoke.dexrank.Commands.DexSave
 import network.roanoke.dexrank.Commands.DexTop
 
 class DexRank : ModInitializer {
@@ -22,6 +23,7 @@ class DexRank : ModInitializer {
     override fun onInitialize() {
         PlayerDataExtensionRegistry.register(PokedexDataExtension.NAME_KEY, PokedexDataExtension::class.java)
         DexTop()
+        DexSave()
         // Events that trigger the Pokédex to update
         CobblemonEvents.POKEMON_CAPTURED.subscribe {
             rankManager.updateDex(it.player, it.pokemon.species)
@@ -53,8 +55,6 @@ class DexRank : ModInitializer {
                     val mon = iterParty.next()
                     rankManager.updateDex(it, mon.species)
                 }
-            } else {
-
             }
         }
 

@@ -9,6 +9,7 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import network.roanoke.dexrank.DexRank;
 
 
@@ -41,13 +42,15 @@ public class DexTop {
                 }
             });
 
-            for (int i = 0; i < Math.min(10, list.size()); i++) {
+            player.sendMessage(Text.literal("= Roanoke PokeDex Leaderboard =").formatted(Formatting.GOLD));
+            for (int i = 0; i < Math.min(8, list.size()); i++) {
                 Map.Entry<String, Integer> entry = list.get(i);
                 Optional<GameProfile> gf = server.getUserCache().getByUuid(UUID.fromString(entry.getKey()));
+                String rank = "#" + (i+1) + " ";
                 if (gf.isPresent()) {
-                    player.sendMessage(Text.literal(gf.get().getName() + ": " + entry.getValue()));
+                    player.sendMessage(Text.literal(rank + gf.get().getName() + ": " + entry.getValue()));
                 } else {
-                    player.sendMessage(Text.literal(entry.getKey() + ": " + entry.getValue()));
+                    player.sendMessage(Text.literal(rank + entry.getKey() + ": " + entry.getValue()));
                 }
             }
 
