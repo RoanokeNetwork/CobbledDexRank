@@ -22,6 +22,7 @@ repositories {
     maven { url = uri("https://maven.impactdev.net/repository/development/") }
      */
     maven("https://maven.nucleoid.xyz/") { name = "Nucleoid" }
+    maven { url= uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 
 dependencies {
@@ -38,6 +39,8 @@ dependencies {
     //modImplementation("com.eliotlash.molang:molang:18")
     //modImplementation("com.cobblemon:mod:1.2.0+1.19.2")
     modImplementation(include("eu.pb4:placeholder-api:2.0.0-pre.4+1.19.3")!!)
+    modImplementation("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
+    include("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 }
 
 tasks {
