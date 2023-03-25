@@ -1,9 +1,13 @@
-package network.roanoke.dexrank;
+package network.roanoke.dexrank.Commands;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import network.roanoke.dexrank.DexRank;
 
@@ -25,7 +29,9 @@ public class DexTop {
 
     private int executeDexTop(CommandContext<ServerCommandSource> ctx) {
         if (ctx.getSource().getPlayer() != null) {
-            var dexMap = DexRank.rankManager.getDexMap();
+            ServerPlayerEntity player = ctx.getSource().getPlayer();
+            MinecraftServer server = ctx.getSource().getServer();
+            HashMap<String, Integer> dexMap = DexRank.rankManager.getDexMap();
 
             List<Map.Entry<String, Integer>> list = new ArrayList<>(dexMap.entrySet());
             Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
@@ -37,7 +43,12 @@ public class DexTop {
 
             for (int i = 0; i < Math.min(10, list.size()); i++) {
                 Map.Entry<String, Integer> entry = list.get(i);
-                ctx.getSource().getPlayer().sendMessage(Text.literal(entry.getKey() + ": " + entry.getValue()));
+                Optional<GameProfile> gf = server.getUserCache().getByUuid(UUID.fromString(entry.getKey()));
+                if (gf.isPresent()) {
+                    player.sendMessage(Text.literal(gf.get().getName() + ": " + entry.getValue()));
+                } else {
+                    player.sendMessage(Text.literal(entry.getKey() + ": " + entry.getValue()));
+                }
             }
 
         }

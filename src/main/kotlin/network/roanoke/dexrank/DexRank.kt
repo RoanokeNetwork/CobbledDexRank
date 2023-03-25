@@ -10,6 +10,7 @@ import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.util.Identifier
+import network.roanoke.dexrank.Commands.DexTop
 
 class DexRank : ModInitializer {
 
