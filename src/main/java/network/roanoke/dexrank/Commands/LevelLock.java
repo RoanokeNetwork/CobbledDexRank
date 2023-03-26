@@ -35,12 +35,12 @@ public class LevelLock {
             PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(player);
             Pokemon pokemon = party.get(slot - 1);
             if (pokemon != null) {
-                MutableText pokeName = pokemon.getSpecies().getTranslatedName().formatted(Formatting.BOLD);
+                // MutableText pokeName = pokemon.getSpecies().getTranslatedName().formatted(Formatting.BOLD);
                 if (DexRank.lockManager.isPokemonLevelLocked(pokemon.getUuid())) {
-                    ctx.getSource().sendMessage(Text.literal("Removing the Level Lock from your " + pokeName));
+                    ctx.getSource().sendMessage(Text.literal("Removing the Level Lock from your Pokemon in slot " + slot));
                     DexRank.lockManager.removeLock(pokemon.getUuid());
                 } else {
-                    ctx.getSource().sendMessage(Text.literal("Adding a Level Lock to your " + pokeName));
+                    ctx.getSource().sendMessage(Text.literal("Adding a Level Lock to your Pokemon in slot " + slot));
                     DexRank.lockManager.addLock(pokemon.getUuid());
                 }
             } else {
