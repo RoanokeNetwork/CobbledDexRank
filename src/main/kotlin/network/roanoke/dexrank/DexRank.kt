@@ -9,21 +9,26 @@ import eu.pb4.placeholders.api.PlaceholderResult
 import eu.pb4.placeholders.api.Placeholders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import network.roanoke.dexrank.Commands.DexSave
 import network.roanoke.dexrank.Commands.DexTop
+import network.roanoke.dexrank.Commands.LevelLock
 
 class DexRank : ModInitializer {
 
     companion object {
         @JvmField
         val rankManager = RankManager()
+        @JvmField
+        val lockManager = LockManager()
     }
 
     override fun onInitialize() {
         PlayerDataExtensionRegistry.register(PokedexDataExtension.NAME_KEY, PokedexDataExtension::class.java)
         DexTop()
         DexSave()
+        LevelLock()
         // Events that trigger the Pokédex to update
         CobblemonEvents.POKEMON_CAPTURED.subscribe {
             rankManager.updateDex(it.player, it.pokemon.species)
@@ -37,6 +42,16 @@ class DexRank : ModInitializer {
             val owner = it.pokemon.getOwnerPlayer()
             if (owner != null) {
                 rankManager.updateDex(owner, it.pokemon.species)
+            }
+        }
+
+        CobblemonEvents.EXPERIENCE_GAINED_EVENT_PRE.subscribe {
+            when (lockManager.isPokemonLevelLocked(it.pokemon.uuid)) {
+                true -> {
+                    it.pokemon.getOwnerPlayer()?.sendMessage(Text.literal("Stopping your Pokemon from levelling up, as it's level locked."))
+                    it.cancel()
+                }
+                false -> {}
             }
         }
 
