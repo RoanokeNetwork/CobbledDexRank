@@ -11,6 +11,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import network.roanoke.dexrank.DexRank;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -34,7 +35,7 @@ public class LevelLock {
             PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(player);
             Pokemon pokemon = party.get(slot - 1);
             if (pokemon != null) {
-                MutableText pokeName = pokemon.getSpecies().getTranslatedName();
+                MutableText pokeName = pokemon.getSpecies().getTranslatedName().formatted(Formatting.BOLD);
                 if (DexRank.lockManager.isPokemonLevelLocked(pokemon.getUuid())) {
                     ctx.getSource().sendMessage(Text.literal("Removing the Level Lock from your " + pokeName));
                     DexRank.lockManager.removeLock(pokemon.getUuid());

@@ -16,6 +16,7 @@ class RankManager {
     var dexMap: HashMap<String, Int> = HashMap<String, Int>()
     val configDir = FabricLoader.getInstance().configDir.toFile()
     val saveFile = File(configDir, "dexrank_data.json")
+    var updateCounter = 0
 
     init {
         if (!saveFile.createNewFile()) {
@@ -49,6 +50,13 @@ class RankManager {
         } else {
             pokedexData.caughtSpecies.add(species.resourceIdentifier)
             dexMap[player.uuidAsString] = pokedexData.caughtSpecies.size;
+            updateCounter += 1
+            when (updateCounter % 10) {
+                0 -> {
+                    updateCounter = 0
+                    saveDexData()
+                }
+            }
         }
     }
 
